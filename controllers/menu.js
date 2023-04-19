@@ -86,13 +86,21 @@ exports.create = [bodyIdValidationRule(), menuValidationRules(), checkValidity, 
 
 // Read
 exports.getAll = (req, res, next) => {
-    Menu.find()
-      .populate("fastfood")  
-      .exec(function (err, result) {
-      if (err) {
-        return res.status(500).json(err);
+  Menu.find()
+  .populate("fastfood")
+    .then(menus => {
+      // Vérifier s'il y a un paramètre de requête `fastFoodId`
+      if (req.query.fastFoodId) {
+        // Filtrer les menus par `fastFoodId`
+        menus = menus.filter(menu => menu.fastFoodId == req.query.fastFoodId);
       }
-      return res.status(200).json(result);
+      res.status(200).json(menus);
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        error: error
+      });
     });
 };
 

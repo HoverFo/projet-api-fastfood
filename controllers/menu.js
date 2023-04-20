@@ -86,22 +86,12 @@ exports.create = [bodyIdValidationRule(), menuValidationRules(), checkValidity, 
 
 // Read
 exports.getAll = (req, res, next) => {
-  Menu.find()
-  .populate("fastfood")
-    .then(menus => {
-      // Vérifier s'il y a un paramètre de requête `fastFoodId`
-      if (req.query.fastFoodId) {
-        // Filtrer les menus par `fastFoodId`
-        menus = menus.filter(menu => menu.fastFoodId == req.query.fastFoodId);
-      }
-      res.status(200).json(menus);
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({
-        error: error
-      });
-    });
+  Menu.find(function (err, result) {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    return res.status(200).json(result);
+  });
 };
 
 exports.getById = [paramIdValidationRule(), checkValidity, (req, res, next) => {
@@ -113,6 +103,16 @@ exports.getById = [paramIdValidationRule(), checkValidity, (req, res, next) => {
         }
         return res.status(200).json(result);
     });
+}];
+
+// Get all menus for a given fast food
+exports.getFastFoodMenus = [paramIdValidationRule(), checkValidity, (req, res, next) => {
+  Menu.find({ fastfood: req.params.id }, function (err, result) {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    return res.status(200).json(result);
+  });
 }];
 
 // Update

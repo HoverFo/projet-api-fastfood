@@ -14,6 +14,9 @@ router.post("/", menu_controller.create);
 // (Étape 2) Ajout de la route qui permet d'afficher tous les étudiants
 router.get("/", menu_controller.getAll);
 
+router.get("/", menu_controller.getFastFoodMenus);
+
+
 // (Étape 2) Ajout de la route qui permet d'afficher un seul étudiant grâce à son identifant
 router.get("/:id", menu_controller.getById);
 

@@ -96,7 +96,6 @@ exports.getAll = (req, res, next) => {
 
 exports.getById = [paramIdValidationRule(), checkValidity, (req, res, next) => {
     Menu.findById(req.params.id)
-    .populate("fastfood")
     .exec(function (err, result) {
         if (err) {
           return res.status(500).json(err);
